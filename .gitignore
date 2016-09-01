@@ -1,2 +1,10 @@
-node_modules
-dist
+.DS_Store
+node_modules/
+dist/
+app/node_modules/
+npm-debug.log
+selenium-debug.log
+test/unit/coverage
+test/e2e/reports
+# Files containing sensitive values
+.env
