@@ -4,5 +4,8 @@
   "license": "MIT",
   "description": "testing auto updating with electron",
   "author": "Alan Chen <yachen@silabs.com>",
-  "main": "./main.js"
+  "main": "main.js",
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0"
+  }
 }
