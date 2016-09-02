@@ -1,6 +1,7 @@
 {
   "name": "electron-quick-start",
-  "version": "1.0.0",
+  "productName": "MyApp",
+  "version": "0.0.2",
   "description": "A minimal Electron application",
   "author": "Alan Chen <alan850627@gmail.com>",
   "license": "MTI",
