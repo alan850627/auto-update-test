@@ -1,12 +1,11 @@
 {
   "name": "auto-update-test",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "description": "testing auto updating with electron",
   "author": "Alan Chen <yachen@silabs.com>",
   "main": "main.js",
   "dependencies": {
-    "auto-updater": "^1.0.2",
     "electron-squirrel-startup": "^1.0.0"
   }
 }

@@ -1,27 +1,24 @@
 const electron = require('electron')
 const fs = require('fs')
-const app = electron.app
-const BrowserWindow = electron.BrowserWindow
+const util = require('util')
 
-let mainWindow
+function writeToFile (msg = 'no message') {
+  var s = String(new Date()) + ': ' + msg + '\n'
+  fs.appendFile('debug.log', s, (err) => {
+    if (err) throw err;
+  })
+}
 
 writeToFile('SessionStarted')
+if(require('electron-squirrel-startup')) return;
 
 // Handle electron-squrrel events
-const autoUpdater = require('auto-updater')
+var autoUpdater = electron.autoUpdater
 const appVersion = require('./package.json').version
 const os = require('os').platform()
 var updateFeed = 'http://localhost:4000/RELEASES'
 
-if (process.env.NODE_ENV !== 'development') {
-  updateFeed = os === 'darwin' ?
-    'MAC-RELEASES-URL-HERE' :
-    'http://localhost:4000/RELEASES';
-}
-
-autoUpdater.setFeedUrl(updateFeed)
-autoUpdater.checkForUpdates()
-autoUpdater.on('error', (err) => {
+autoUpdater.on('error', (err, msg) => {
   writeToFile(msg)
 })
 autoUpdater.on('checking-for-update', () => {
@@ -38,45 +35,60 @@ autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName, releaseDa
   autoUpdater.quitAndInstall()
 })
 
+autoUpdater.setFeedURL(updateFeed)
+try {
+  // this method can only be run on installed application
+  autoUpdater.checkForUpdates()
+} catch (err) {
+  console.log(err)
+}
+
+
+
 // ///////////////////////////////////////////////////////////
-var path = require('path')
-var spawn = require('child_process').spawn
-var debug = require('debug')('electron-squirrel-startup')
-function run (args, done) {
-  var updateExe = path.resolve(path.dirname(process.execPath), '..', 'Update.exe')
-  debug('Spawning `%s` with args `%s`', updateExe, args)
-  spawn(updateExe, args, {
-    detached: true,
-  }).on('close', done)
-}
-
-function writeToFile (msg) {
-  var s = String(new Date()) + ': ' + msg + '\n'
-  fs.appendFile('debug.log', s, (err) => {
-    if (err) throw err;
-  })
-}
-
-if (process.platform === 'win32') {
-  var cmd = process.argv[1]
-  writeToFile(cmd)
-  debug('processing squirrel command `%s`', cmd)
-  var target = path.basename(process.execPath)
-
-  if (cmd === '--squirrel-install' || cmd === '--squirrel-updated') {
-    run(['--createShortcut=' + target + ''], app.quit)
-    return true
-  }
-  if (cmd === '--squirrel-uninstall') {
-    run(['--removeShortcut=' + target + ''], app.quit)
-    return true
-  }
-  if (cmd === '--squirrel-obsolete') {
-    app.quit()
-    return true
-  }
-}
+// var path = require('path')
+// var spawn = require('child_process').spawn
+// var debug = require('debug')('electron-squirrel-startup')
+// function run (args, done) {
+//   var updateExe = path.resolve(path.dirname(process.execPath), '..', 'Update.exe')
+//   debug('Spawning `%s` with args `%s`', updateExe, args)
+//   spawn(updateExe, args, {
+//     detached: true,
+//   }).on('close', done)
+// }
+//
+// function writeToFile (msg = 'no message') {
+//   var s = String(new Date()) + ': ' + msg + '\n'
+//   fs.appendFile('debug.log', s, (err) => {
+//     if (err) throw err;
+//   })
+// }
+//
+// if (process.platform === 'win32') {
+//   var cmd = process.argv[1]
+//   writeToFile(cmd)
+//   debug('processing squirrel command `%s`', cmd)
+//   var target = path.basename(process.execPath)
+//
+//   if (cmd === '--squirrel-install' || cmd === '--squirrel-updated') {
+//     run(['--createShortcut=' + target + ''], app.quit)
+//     return true
+//   }
+//   if (cmd === '--squirrel-uninstall') {
+//     run(['--removeShortcut=' + target + ''], app.quit)
+//     return true
+//   }
+//   if (cmd === '--squirrel-obsolete') {
+//     app.quit()
+//     return true
+//   }
+// }
 // //////////////////////////////////////////////////////////////////////////
+
+
+const app = electron.app
+const BrowserWindow = electron.BrowserWindow
+let mainWindow
 
 function createWindow () {
   mainWindow = new BrowserWindow({width: 800, height: 600})
