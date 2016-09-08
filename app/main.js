@@ -16,8 +16,9 @@ if(require('electron-squirrel-startup')) return;
 var autoUpdater = electron.autoUpdater
 const appVersion = require('./package.json').version
 const os = require('os').platform()
-var updateFeed = 'http://nuts-autoupdate-test.herokuapp.com/update/win32/' + appVersion
-writeToFile('attempt to ping: ' + updateFeed)
+var updateFeed = `http://nuts-autoupdate-test.herokuapp.com/update/${os}/${appVersion}`
+writeToFile('attempt to hit: ' + updateFeed)
+
 // var updateFeed = 'C:/Users/yachen/Documents/auto-update-test/dist/win'
 
 autoUpdater.on('error', (err, msg) => {
