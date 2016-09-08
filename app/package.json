@@ -1,6 +1,6 @@
 {
   "name": "auto-update-test",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "license": "MIT",
   "description": "testing auto updating with electron",
   "author": "Alan Chen <yachen@silabs.com>",
