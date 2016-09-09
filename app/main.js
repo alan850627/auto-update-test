@@ -40,7 +40,7 @@ autoUpdater.setFeedURL(updateFeed)
 try {
   // .checkForUpdates() can only be called when squirrel exists and there is no other instance running
   // On first run, squirrel ends slower than the app starts, so we're waiting 2 seconds for squirrel
-  // to close before checking for updates again. 
+  // to close before checking for updates again.
   if (process.argv[1] === '--squirrel-firstrun') {
     setTimeout(() => {
       writeToFile('attempt to hit: ' + updateFeed)
@@ -55,7 +55,7 @@ try {
 }
 
 
-
+// This is a mock of `electron-squirrel-startup`
 // ///////////////////////////////////////////////////////////
 // var path = require('path')
 // var spawn = require('child_process').spawn
@@ -70,7 +70,6 @@ try {
 //
 // if (process.platform === 'win32') {
 //   var cmd = process.argv[1]
-//   writeToFile(cmd)
 //   debug('processing squirrel command `%s`', cmd)
 //   var target = path.basename(process.execPath)
 //
@@ -89,7 +88,7 @@ try {
 // }
 // //////////////////////////////////////////////////////////////////////////
 
-
+// electron stuff
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 let mainWindow
