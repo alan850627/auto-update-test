@@ -9,7 +9,7 @@ function writeToFile (msg = 'no message') {
   })
 }
 
-writeToFile('SessionStarted')
+writeToFile('SessionStarted ' + process.argv[1])
 if(require('electron-squirrel-startup')) return;
 
 // Handle electron-squrrel events
@@ -38,9 +38,10 @@ autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName, releaseDa
 
 autoUpdater.setFeedURL(updateFeed)
 try {
-  // this method can only be run on installed application
+  // .checkForUpdates() can only be called when squirrel exists and there is no other instance running
+  // On first run, squirrel ends slower than the app starts, so we're waiting 2 seconds for squirrel
+  // to close before checking for updates again. 
   if (process.argv[1] === '--squirrel-firstrun') {
-    writeToFile('Squirrel Firstrun')
     setTimeout(() => {
       writeToFile('attempt to hit: ' + updateFeed)
       autoUpdater.checkForUpdates()
