@@ -16,9 +16,7 @@ if(require('electron-squirrel-startup')) return;
 var autoUpdater = electron.autoUpdater
 const appVersion = require('./package.json').version
 const os = require('os').platform()
-var updateFeed = `http://nuts-autoupdate-test.herokuapp.com/updates/update/${os}/${appVersion}`
-writeToFile('attempt to hit: ' + updateFeed)
-
+var updateFeed = `https://nuts-autoupdate-test.herokuapp.com/update/${os}/${appVersion}`
 // var updateFeed = 'C:/Users/yachen/Documents/auto-update-test/dist/win'
 
 autoUpdater.on('error', (err, msg) => {
@@ -35,14 +33,22 @@ autoUpdater.on('update-not-available', () => {
 })
 autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName, releaseDate, updateURL) => {
   writeToFile('update-downloaded')
-  // autoUpdater.quitAndInstall()
+  autoUpdater.quitAndInstall()
 })
 
 autoUpdater.setFeedURL(updateFeed)
 try {
   // this method can only be run on installed application
-  // if (process.argv[1] !== '--squirrel-firstrun')
-  autoUpdater.checkForUpdates()
+  if (process.argv[1] === '--squirrel-firstrun') {
+    writeToFile('Squirrel Firstrun')
+    setTimeout(() => {
+      writeToFile('attempt to hit: ' + updateFeed)
+      autoUpdater.checkForUpdates()
+    }, 2000)
+  } else {
+    writeToFile('attempt to hit: ' + updateFeed)
+    autoUpdater.checkForUpdates()
+  }
 } catch (err) {
   writeToFile(err)
 }
