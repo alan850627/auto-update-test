@@ -2,6 +2,7 @@
 node_modules/
 dist/
 app/node_modules/
+app_old/node_modules/
 npm-debug.log
 selenium-debug.log
 test/unit/coverage
